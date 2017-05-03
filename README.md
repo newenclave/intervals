@@ -155,8 +155,61 @@ dis.cut(ival_type::right_open(100)); /// {(-inf, -1)(-1, 0)[10, 100) [100, +inf)
 
 ```
 
+#### find
+
+##### find by domain type
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
+auto f = dis.find( 100.999 );
+/// here is f is iterator than points to the unique set's element "(-inf, +inf)"
+
+dis.cut(ival_type::closed( -100, 100 )); /// {(-inf, -100) (100 +inf)}
+auto f = dis.find( 100.999 );
+auto s = dis.find( 0 );
+
+/// f points to (100 +inf)
+/// s is dis.end( )
+
+```
+
+##### find by interval
+Seaching by interval is a little bit tricky. ```dis.insert(some_interval)```
+returns iterator that points to element that equal to "some_interval" or contains it.
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(ival_type::left_closed(  0, 10));
+dis.insert(ival_type::left_closed( 10, 20));
+dis.insert(ival_type::left_closed( 20, 30));
+dis.insert(ival_type::left_closed( 30, 40));
+/// dis = {[0, 10)[10, 20)[20, 30)[30, 40)  }
+
+auto f = dis.find( ival_type::left_closed( 20, 30) ) // ok. points to [20, 30)
+auto s = dis.find( ival_type::open( 20, 30) )        // ok. points to [20, 30)
+auto t = dis.find( ival_type::open( 32, 35) )        // ok. points to [30, 40)
+auto e = dis.find( ival_type::open( 10, 35) )        // == end( )
+
+```
 
 ### map
 
 The map is very similar to the set but has mapped value and operator []
 
+#### some examples
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::map<double, std::string> dim; // maps interval<double> -> string
+
+dim[ival_type::infinite( )] = "infinite";
+/// dim { (-inf, +inf) -> "infinite" }
+
+
+
+```
