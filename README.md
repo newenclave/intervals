@@ -80,7 +80,7 @@ double_ival_set.insert(ival_type::left_opened(20));
 #### insert
 
 Insterts new interval to the set.
-It doesn't merge other intervals if new interval intersects with them.
+It doesn't merge the other intervals if new interval intersects with them.
 
 ```cpp
 usage ival_type = intervals::interval<double>;
@@ -115,17 +115,17 @@ dis.insert(ival_type::open( 0, 0)); /// The result is: {(-inf, 0] (0, 0)}
 ```
 
 #### merge
-Insterts new interval to the set and merge all the others that it intersects.
+Insterts new interval to the set and merges all the others that it intersects.
 
 ```cpp
 usage ival_type = intervals::interval<double>;
 intervals::set<double> dis;
 
-dis.insert(left_closed( 0, 10 ) ); /// {[0, 10)}
-dis.insert(left_closed( 10, 20 ) ); /// {[0, 10),[10, 20)}
-//                                          ^        ^
-//                                          |        |
-// merge value                              [  5, 15 )
+dis.merge(left_closed( 0, 10 ) ); /// {[0, 10)}
+dis.merge(left_closed( 10, 20 ) ); /// {[0, 10),[10, 20)}
+//                                         ^        ^
+//                                         |        |
+// merge value                             [ 5, 15  )
 
 dis.merge(left_closed( 5, 15 ) ); /// {[0, 20)}
 
