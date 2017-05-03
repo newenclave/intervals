@@ -229,9 +229,19 @@ intervals::map<double, std::string> dim; // maps interval<double> -> string
 /// intervals::map<double, std::string>::value_type is std::pair<const ival_type, std::string>
 
 dim[ival_type::infinite( )] = "infinite";
-dim.insert(std::make_pair(ival_type::closed(0, 10), "0..100"));
+dim.insert(std::make_pair(ival_type::closed(0, 100), "0..100"));
+dim[ival_type::degenerate(50)] = "!";
 
-/// dim { (-inf, 0 )->"infinite"; [0, 10]->"0..100"; (100, +inf)->"infinite" }
+/// dim { (-inf, 0 )->"infinite";
+///       [0, 50) ->"0..100";
+///       [50, 50] -> "!";
+///       (50, 100] ->"0..100";
+///       (100, +inf)->"infinite" }
 
+
+dim.merge( std::make_pair(ival_type::left_closed(50, 110), "new_inf!") );
+/// dim { (-inf, 0 )->"infinite";
+///       [0, 50) ->"0..100";
+///       [50, +inf)->"new_inf!" }
 
 ```
