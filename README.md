@@ -9,7 +9,7 @@ Compiler with C++11.
 
 # Usage
 
-There are some thing in the library:
+There are some things in the library:
 
  * interval
  * set of intervals
@@ -39,8 +39,8 @@ ival_type double_ival = ival_type::left_open(-0.1, 10.1);
 ival_type::open(a, b)           -> (a, b)
 ival_type::closed(a, b)         -> [a, b]
 
-ival_type::degenerate(a)        -> ival_type::closed(a, a)
-                                -> [a, a]
+ival_type::degenerate(a)        -> [a, a]
+ival_type::closed(a, a)         -> [a, a]
 
 ival_type::left_open(a, b)      -> (a, b]
 ival_type::left_open(a)         -> (a, +inf)
@@ -78,8 +78,9 @@ double_ival_set.insert(ival_type::left_opened(20));
 ```
 
 #### insert
-Insterts nrew interval to the set.
-It doesn't merge the values if new interval intersect with them.
+
+Insterts new interval to the set.
+It doesn't merge other intervals if new interval intersects with them.
 
 ```cpp
 usage ival_type = intervals::interval<double>;
@@ -87,18 +88,45 @@ intervals::set<double> dis;
 
 dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
 dis.insert(ival_type::left_closed( 0, 10)); /// {(-inf, 0) [0, 10) [10, +inf)}
-                                                           ^
-                   inserted value splits other interval____|
+//                                                         ^
+//                 inserted value splits other interval____|
 
-/// empty interval can be inserted
+/// empty interval can be inserted (see "known issue" above)
 dis.insert(ival_type::left_open( -1, -1 )); /// {(-inf, -1](-1, -1](-1, 0) [0, 10) [10, +inf)}
-                                                           ^      ^
-                                         empty interval____|______|
-
+//                                                         ^      ^
+//                                       empty interval____|______|
 
 ```
 
+##### known issue
+    There is no way to insert empty interval with both open side (a, a)
+    Because it is impossible to know which endpoint must be closed.
+    So this type of intervals just cut off right part from interval that intersects with
 
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
 
+dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
 
+/// warning!
+dis.insert(ival_type::open( 0, 0)); /// The result is: {(-inf, 0] (0, 0)}
 
+```
+
+#### merge
+Insterts new interval to the set and merge all the others that it intersects.
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(left_closed( 0, 10 ) ); /// {[0, 10)}
+dis.insert(left_closed( 10, 20 ) ); /// {[0, 10),[10, 20)}
+//                                          ^        ^
+//                                          |        |
+// merge value                              [  5, 15 )
+
+dis.merge(left_closed( 5, 15 ) ); /// {[0, 20)}
+
+```
