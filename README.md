@@ -88,7 +88,12 @@ intervals::set<double> dis;
 dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
 dis.insert(ival_type::left_closed( 0, 10)); /// {(-inf, 0) [0, 10) [10, +inf)}
                                                            ^
-                                                           |___inserted value splits other interval
+                   inserted value splits other interval____|
+
+/// empty interval can be inserted
+dis.insert(ival_type::left_open( -1, -1 )); /// {(-inf, -1](-1, -1](-1, 0) [0, 10) [10, +inf)}
+                                                           ^      ^
+                                         empty interval____|______|
 
 
 ```
