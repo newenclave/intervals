@@ -68,6 +68,7 @@ Represents set of disjoint intervals. Interval can be added to the set, can be c
 usage ival_type = intervals::interval<double>;
 intervals::set<double> double_ival_set;
 
+/// example
 double_ival_set.insert(ival_type::open(0, 10));
 double_ival_set.insert(ival_type::closed(10, 20));
 double_ival_set.insert(ival_type::left_opened(20));
@@ -76,9 +77,21 @@ double_ival_set.insert(ival_type::left_opened(20));
 
 ```
 
+#### insert
+Insterts nrew interval to the set.
+It doesn't merge the values if new interval intersect with them.
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
+dis.insert(ival_type::left_closed( 0, 10)); /// {(-inf, 0) [0, 10) [10, +inf)}
+                                                           ^
+                                                           |___inserted value splits other interval
 
 
-
+```
 
 
 
