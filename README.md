@@ -167,6 +167,7 @@ dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
 auto f = dis.find( 100.999 );
 /// here is f is iterator than points to the unique set's element "(-inf, +inf)"
 
+....
 dis.cut(ival_type::closed( -100, 100 )); /// {(-inf, -100) (100 +inf)}
 auto f = dis.find( 100.999 );
 auto s = dis.find( 0 );
@@ -197,6 +198,25 @@ auto e = dis.find( ival_type::open( 10, 35) )        // == end( )
 
 ```
 
+##### find intersection
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(ival_type::left_closed(  0, 10));
+dis.insert(ival_type::left_closed( 10, 20));
+dis.insert(ival_type::left_closed( 20, 30));
+dis.insert(ival_type::left_closed( 30, 40));
+/// dis = {[0, 10)[10, 20)[20, 30)[30, 40)  }
+
+auto f = dis.find_intersection( ival_type::left_closed( 12, 32) )
+// f is itartors pair {first: [10, 20), second: [30, 40) }
+
+auto s = dis.find_intersection( ival_type::open( 10, 11) )
+// s is itartors pair {first: [10, 20), second: [10, 20) }
+
+```
+
 ### map
 
 The map is very similar to the set but has mapped value and operator []
@@ -206,10 +226,12 @@ The map is very similar to the set but has mapped value and operator []
 ```cpp
 usage ival_type = intervals::interval<double>;
 intervals::map<double, std::string> dim; // maps interval<double> -> string
+/// intervals::map<double, std::string>::value_type is std::pair<const ival_type, std::string>
 
 dim[ival_type::infinite( )] = "infinite";
-/// dim { (-inf, +inf) -> "infinite" }
+dim.insert(std::make_pair(ival_type::closed(0, 10), "0..100"));
 
+/// dim { (-inf, 0 )->"infinite"; [0, 10]->"0..100"; (100, +inf)->"infinite" }
 
 
 ```
