@@ -59,6 +59,8 @@ ival_type::infinite( )          -> (-inf, +inf)
 ival_type::minus_infinite( )    -> (-inf, -inf) or (-inf)
 ival_type::plus_infinite( )     -> (+inf, +inf) or (+inf)
 
+ival_type::intersection( [a, b) [c, d) ) -> [a, d)
+
 ```
 
 ### set
@@ -128,5 +130,26 @@ dis.merge(left_closed( 10, 20 ) ); /// {[0, 10),[10, 20)}
 // merge value                             [ 5, 15  )
 
 dis.merge(left_closed( 5, 15 ) ); /// {[0, 20)}
+
+```
+
+#### cut
+Cuts interval of values from the set.
+
+
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> dis;
+
+dis.insert(ival_type::infinite( )); /// {(-inf, +inf)}
+
+dis.cut(ival_type::left_closed( 0, 10)); /// {(-inf, 0) [10, +inf)}
+
+dis.cut(ival_type::degenerate(-1)); /// {(-inf, -1)(-1, 0)[10, +inf)}
+
+/// cut empty interval; ie split the other into 2 parts
+dis.cut(ival_type::right_open(100)); /// {(-inf, -1)(-1, 0)[10, 100) [100, +inf)}
+//                                                                  ^
+//                                              [100, 100) here ____|
 
 ```
