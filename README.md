@@ -17,7 +17,7 @@ There are some thing in the library:
 
 ### interval
 
-Different type cvan be used as domain type for intervals
+Different type can be used as domain type for intervals
 
 ```cpp
 intervals::interval<double> double_ival;
@@ -26,7 +26,58 @@ intervals::interval<my_class, my_less> my_class_ival;
 
 ```
 
+```cpp
+usage ival_type = intervals::interval<double>;
+ival_type double_ival = ival_type::left_open(-0.1, 10.1);
+
+/// double_ival == "(-0.1, 10.1]"
+
+```
+#### producers
+
+```cpp
+ival_type::open(a, b)           -> (a, b)
+ival_type::closed(a, b)         -> [a, b]
+
+ival_type::degenerate(a)        -> ival_type::closed(a, a)
+                                -> [a, a]
+
+ival_type::left_open(a, b)      -> (a, b]
+ival_type::left_open(a)         -> (a, +inf)
+
+ival_type::left_closed(a, b)    -> [a, b)
+ival_type::left_closed(a)       -> [a, +inf)
+
+ival_type::right_open(a, b)     -> [a, b)
+ival_type::right_open(a)        -> (-inf, b)
+
+ival_type::right_closed(a, b)   -> (a, b]
+ival_type::right_closed(a)      -> (-inf, b]
+
+//// infinities
+ival_type::infinite( )          -> (-inf, +inf)
+ival_type::minus_infinite( )    -> (-inf, -inf) or (-inf)
+ival_type::plus_infinite( )     -> (+inf, +inf) or (+inf)
+
+```
+
 ### set
+
+Represents set of disjoint intervals. Interval can be added to the set, can be cut off or merged.
+```cpp
+usage ival_type = intervals::interval<double>;
+intervals::set<double> double_ival_set;
+
+double_ival_set.insert(ival_type::open(0, 10));
+double_ival_set.insert(ival_type::closed(10, 20));
+double_ival_set.insert(ival_type::left_opened(20));
+
+/// double_ival_set == "(0, 10) [10, 20] (20, +inf)"
+
+```
+
+
+
 
 
 
