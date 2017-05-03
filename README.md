@@ -66,6 +66,7 @@ ival_type::intersection( [a, b) [c, d) ) -> [a, d)
 ### set
 
 Represents set of disjoint intervals. Interval can be added to the set, can be cut off or merged.
+
 ```cpp
 usage ival_type = intervals::interval<double>;
 intervals::set<double> double_ival_set;
@@ -153,3 +154,9 @@ dis.cut(ival_type::right_open(100)); /// {(-inf, -1)(-1, 0)[10, 100) [100, +inf)
 //                                              [100, 100) here ____|
 
 ```
+
+
+### map
+
+The map is very similar to the set but has mapped value and operator []
+
