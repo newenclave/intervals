@@ -208,6 +208,9 @@ dis.insert(ival_type::left_closed( 10, 20));
 dis.insert(ival_type::left_closed( 20, 30));
 dis.insert(ival_type::left_closed( 30, 40));
 /// dis = {[0, 10)[10, 20)[20, 30)[30, 40)  }
+///                   ^               ^
+///                   |               |
+///                   +---[12,  32)---+
 
 auto f = dis.find_intersection( ival_type::left_closed( 12, 32) )
 // f is itartors pair {first: [10, 20), second: [30, 40) }
