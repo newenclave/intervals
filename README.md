@@ -178,7 +178,7 @@ auto s = dis.find( 0 );
 ```
 
 ##### find by interval
-Seaching by interval is a little bit tricky. ```dis.insert(some_interval)```
+Seaching by interval is a little bit tricky. ```dis.find(some_interval)```
 returns iterator that points to element that equal to "some_interval" or contains it.
 
 ```cpp
