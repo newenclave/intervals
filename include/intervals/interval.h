@@ -27,15 +27,20 @@ namespace intervals {
         bool check(...);
         no_type check( const no_type& );
 
+        struct zero_ref {
+        protected:
+            template <typename T>
+            static const T &get( );
+        };
+
         namespace equal {
 
             template<typename T, typename Arg>
             no_type operator == ( const T&, const Arg& );
 
             template <typename T, typename Arg = T>
-            struct exists {
-                enum { value = ( sizeof( check( *reinterpret_cast<T*>( 0 ) ==
-                                                *reinterpret_cast<Arg*>( 0 ) )
+            struct exists: public zero_ref {
+                enum { value = ( sizeof( check( get<T>( ) == get<Arg>( ) )
                                        ) != sizeof( no_type )
                                )
                      };
@@ -90,9 +95,8 @@ namespace intervals {
             no_type operator <= ( const T&, const Arg& );
 
             template <typename T, typename Arg = T>
-            struct exists {
-                enum { value = ( sizeof( check( *reinterpret_cast<T*>( 0 ) <=
-                                                *reinterpret_cast<Arg*>( 0 ) )
+            struct exists: public zero_ref {
+                enum { value = ( sizeof( check( get<T>( ) <= get<Arg>( ) )
                                        ) != sizeof( no_type )
                                )
                      };
